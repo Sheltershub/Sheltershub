@@ -12,7 +12,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
+  // Mock credentials
+  const MOCK_CREDENTIALS = [
+    { email: 'buyer@sheltershub.com', password: 'password123', role: 'user', redirect: 'user-profile' },
+    { email: 'agency@sheltershub.com', password: 'password123', role: 'agency', redirect: 'agency-dashboard' },
+    { email: 'developer@sheltershub.com', password: 'password123', role: 'developer', redirect: 'developer-dashboard' },
+    { email: 'admin@sheltershub.com', password: 'admin123', role: 'admin', redirect: 'admin-dashboard' },
+    { email: 'editor@sheltershub.com', password: 'editor123', role: 'editor', redirect: 'admin-dashboard' },
+    { email: 'agent@sheltershub.com', password: 'demo123', role: 'agent', redirect: 'agent-verification' }
+  ];
+
   // User Type State
   const [userType, setUserType] = useState('Buyer');
   const userTypes = ['Buyer', 'Agent', 'Agency', 'Developer', 'Administrator', 'Editor'];
@@ -20,15 +31,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
   // Handle User Type Selection
   const handleUserTypeChange = (type: string) => {
     setUserType(type);
-    if (type === 'Agent') {
-      setEmail('agent@sheltershub.com');
-      setPassword('demo123');
-    } else if (type === 'Administrator') {
-      setEmail('admin@sheltershub.com');
-      setPassword('admin123');
-    } else if (type === 'Editor') {
-      setEmail('editor@sheltershub.com');
-      setPassword('editor123');
+    setError(null);
+    const mock = MOCK_CREDENTIALS.find(c => {
+      if (type === 'Buyer') return c.role === 'user';
+      if (type === 'Administrator') return c.role === 'admin';
+      return c.role === type.toLowerCase();
+    });
+
+    if (mock) {
+      setEmail(mock.email);
+      setPassword(mock.password);
     } else {
       setEmail('');
       setPassword('');
@@ -37,30 +49,33 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // Basic Validation
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     setLoading(true);
+    
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
       
-      // Role-based routing
-      if (userType === 'Administrator') {
-         onLogin('admin');
-         onNavigate('admin-dashboard');
-      } else if (userType === 'Editor') {
-         onLogin('editor');
-         onNavigate('admin-dashboard'); // Editor shares the same layout but with restricted access
-      } else if (userType === 'Agent') {
-         onLogin('agent');
-         onNavigate('agent-verification');
-      } else if (userType === 'Developer') {
-         onLogin('developer');
-         onNavigate('developer-dashboard');
-      } else if (userType === 'Agency') {
-         onLogin('agency');
-         onNavigate('agency-dashboard'); 
+      // Find matching mock credentials
+      const user = MOCK_CREDENTIALS.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        onLogin(user.role);
+        onNavigate(user.redirect);
       } else {
-         onLogin('user');
-         setView('verify');
+        setError('Invalid login details. Please check your email and password.');
       }
     }, 1500);
   };
@@ -191,6 +206,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
               {/* User Type Selection */}
               {(view === 'login' || view === 'register') && (
                 <div className="mb-6">
+                  {error && (
+                    <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-600 text-sm font-medium animate-fadeIn">
+                       {error}
+                    </div>
+                  )}
                   <label className="block text-sm font-bold text-gray-700 mb-3 text-center">
                     I am a...
                   </label>
