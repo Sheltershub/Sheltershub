@@ -206,7 +206,6 @@ const SingleProperty: React.FC<SinglePropertyProps> = ({ onNavigate, propertyId 
             setWatermarkedImage(canvas.toDataURL('image/jpeg', 0.95));
         }
       } catch (error) {
-        console.error("Watermark generation failed:", error);
         // Fallback to original image if something fails (e.g. CORS error)
         if (isMounted) setWatermarkedImage(property.images[activeImage]);
       } finally {

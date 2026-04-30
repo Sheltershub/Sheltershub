@@ -31,7 +31,7 @@ const BuyerProfilePage: React.FC<BuyerProfilePageProps> = ({ onNavigate, userRol
           profileImage: parsed.profileImage || null
         });
       } catch (e) {
-        console.error("Failed to parse saved profile", e);
+        // Failed to parse saved profile, ignore and use default
       }
     }
   }, []);

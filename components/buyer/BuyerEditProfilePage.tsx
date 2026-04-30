@@ -40,7 +40,7 @@ const BuyerEditProfilePage: React.FC<BuyerEditProfilePageProps> = ({ onNavigate,
           setProfileImage(parsed.profileImage);
         }
       } catch (e) {
-        console.error("Failed to parse saved profile", e);
+        // Failed to parse saved profile, ignore and use default
       }
     }
   }, []);
