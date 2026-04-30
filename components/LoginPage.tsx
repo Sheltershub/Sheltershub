@@ -73,19 +73,18 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin, onBack }) =>
         
         <div className="text-center">
           <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
-          <img 
-            src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" 
-            alt="Sheltershub Logo" 
-            className="h-16 w-auto mx-auto" 
-          />
+            <img 
+              src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" 
+              alt="Sheltershub Logo" 
+              className="h-16 w-auto mx-auto" 
+            />
+          </div>
+          <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white mb-2">Welcome Back</h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">Log in to your Sheltershub account.</p>
         </div>
-        <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white mb-2">Welcome Back</h2>
-        <p className="text-gray-500 dark:text-gray-400 font-medium">Log in to your Sheltershub account.</p>
-      </div>
-    </div>
 
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-slate-dark-900 py-10 px-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-slate-dark-800 mb-8 relative overflow-hidden">
+        <div className="mt-8">
+          <div className="bg-white dark:bg-slate-dark-900 py-10 px-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-slate-dark-800 mb-8 relative overflow-hidden">
           {success && (
             <div className="absolute inset-x-0 top-0 bg-green-500 text-white py-3 px-4 text-center font-bold text-sm animate-slideDown z-20">
               Login successful. Redirecting to your dashboard...
@@ -182,6 +181,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin, onBack }) =>
             </div>
           </form>
         </div>
+      </div>
 
         {/* Quick Access Row */}
         <div className="flex flex-wrap justify-center gap-3 mt-8 w-full max-w-lg mx-auto px-4">
