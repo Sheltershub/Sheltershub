@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Header from '../Header';
 import Footer from '../Footer';
 
 interface EditorRegisterProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
-const EditorRegister: React.FC<EditorRegisterProps> = ({ onNavigate }) => {
+const EditorRegister: React.FC<EditorRegisterProps> = ({ onNavigate, onBack }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -20,7 +22,17 @@ const EditorRegister: React.FC<EditorRegisterProps> = ({ onNavigate }) => {
     <div className="bg-gray-50 min-h-screen font-sans">
       <Header onNavigate={onNavigate} activePage="home" />
 
-      <main className="container mx-auto px-4 py-16 flex justify-center">
+      <main className="container mx-auto px-4 py-16 flex flex-col items-center">
+        <div className="w-full max-w-2xl mb-6">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] transition-colors group"
+          >
+            <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm font-bold">Back to Previous Page</span>
+          </button>
+        </div>
+
         <div className="w-full max-w-2xl">
             
             {submitted ? (

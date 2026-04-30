@@ -105,17 +105,32 @@ import { featuredProperties, latestProperties, adSliderImages, wideAdSliderImage
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
+  const [navigationHistory, setNavigationHistory] = useState<string[]>([]);
   const [userRole, setUserRole] = useState<string>('guest'); // 'admin', 'editor', 'agent', 'agency', 'developer', 'user', 'guest'
 
   const handleNavigate = (page: string) => {
     if (page === 'logout') {
         setUserRole('guest');
         setCurrentPage('home');
+        setNavigationHistory([]);
         window.scrollTo(0, 0);
         return;
     }
+    
+    setNavigationHistory(prev => [...prev, currentPage]);
     setCurrentPage(page);
     window.scrollTo(0, 0);
+  };
+
+  const handleBack = () => {
+    if (navigationHistory.length > 0) {
+      const prevPage = navigationHistory[navigationHistory.length - 1];
+      setNavigationHistory(prev => prev.slice(0, -1));
+      setCurrentPage(prevPage);
+      window.scrollTo(0, 0);
+    } else {
+      handleNavigate('home');
+    }
   };
 
   const handleLogin = (role: string) => {
@@ -131,12 +146,12 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
-    if (currentPage === 'login') return <LoginPage onNavigate={handleNavigate} onLogin={handleLogin} />;
-    if (currentPage === 'forgot-password') return <ForgotPasswordPage onNavigate={handleNavigate} />;
-    if (currentPage === 'reset-password') return <ResetPasswordPage onNavigate={handleNavigate} />;
-    if (currentPage === 'email-verification') return <EmailVerificationPage onNavigate={handleNavigate} />;
+    if (currentPage === 'login') return <LoginPage onNavigate={handleNavigate} onLogin={handleLogin} onBack={handleBack} />;
+    if (currentPage === 'forgot-password') return <ForgotPasswordPage onNavigate={handleNavigate} onBack={handleBack} />;
+    if (currentPage === 'reset-password') return <ResetPasswordPage onNavigate={handleNavigate} onBack={handleBack} />;
+    if (currentPage === 'email-verification') return <EmailVerificationPage onNavigate={handleNavigate} onBack={handleBack} />;
     if (currentPage === 'access-denied') return <AccessDeniedPage onNavigate={handleNavigate} />;
-    if (currentPage === 'editor-register') return <EditorRegister onNavigate={handleNavigate} />;
+    if (currentPage === 'editor-register') return <EditorRegister onNavigate={handleNavigate} onBack={handleBack} />;
     
     // Admin Routes
     if (currentPage === 'admin-dashboard') return renderRestricted(<AdminDashboard onNavigate={handleNavigate} userRole={userRole} />, ['admin', 'editor']);
@@ -165,7 +180,7 @@ const App: React.FC = () => {
     if (currentPage === 'admin-users') return renderRestricted(<AdminUsers onNavigate={handleNavigate} userRole={userRole} />, ['admin']);
     if (currentPage === 'admin-subscriptions') return renderRestricted(<AdminSubscriptions onNavigate={handleNavigate} userRole={userRole} />, ['admin']);
     if (currentPage === 'admin-settings') return renderRestricted(<AdminSettings onNavigate={handleNavigate} userRole={userRole} />, ['admin']);
-    if (currentPage === 'admin-register') return renderRestricted(<AdminRegister onNavigate={handleNavigate} userRole={userRole} />, ['admin']);
+    if (currentPage === 'admin-register') return renderRestricted(<AdminRegister onNavigate={handleNavigate} userRole={userRole} onBack={handleBack} />, ['admin']);
 
     // Developer Dashboard Routes
     if (currentPage === 'developer-dashboard') return <DeveloperDashboard onNavigate={handleNavigate} />;
@@ -255,12 +270,13 @@ const App: React.FC = () => {
     if (currentPage === 'compare-properties') return <ComparePropertiesPage onNavigate={handleNavigate} />;
     if (currentPage === 'agencies') return <AgenciesPage onNavigate={handleNavigate} />;
     if (currentPage === 'agency-detail') return <SingleAgencyPage onNavigate={handleNavigate} userRole={userRole} />;
-    if (currentPage === 'add-agency' || currentPage === '/register/agency') return <AddAgencyPage onNavigate={handleNavigate} />;
-    if (currentPage === 'add-agent' || currentPage === '/register/agent') return <AddAgentPage onNavigate={handleNavigate} />;
-    if (currentPage === 'agent-invite-register' || currentPage === '/register/agent/invite') return <AgentInviteRegistrationPage onNavigate={handleNavigate} />;
-    if (currentPage === 'agency-invite-register' || currentPage === '/register/agency/invite') return <AgencyInviteRegistrationPage onNavigate={handleNavigate} />;
-    if (currentPage === 'add-developer' || currentPage === '/register/developer') return <AddDeveloperPage onNavigate={handleNavigate} />;
-    if (currentPage === 'register' || currentPage === '/register') return <RegisterPage onNavigate={handleNavigate} />;
+    if (currentPage === 'add-agency' || currentPage === '/register/agency') return <AddAgencyPage onNavigate={handleNavigate} onBack={handleBack} />;
+    if (currentPage === 'add-agent' || currentPage === '/register/agent') return <AddAgentPage onNavigate={handleNavigate} onBack={handleBack} />;
+    if (currentPage === 'agent-invite-register' || currentPage === '/register/agent/invite' || currentPage === 'register-invited-agent-agency') return <AgentInviteRegistrationPage onNavigate={handleNavigate} inviterType="agency" inviterName="Lakeside Estates" onBack={handleBack} />;
+    if (currentPage === 'register-invited-agent-developer') return <AgentInviteRegistrationPage onNavigate={handleNavigate} inviterType="developer" inviterName="Green Valley Developers" onBack={handleBack} />;
+    if (currentPage === 'agency-invite-register' || currentPage === '/register/agency/invite' || currentPage === 'register-invited-agency-developer') return <AgencyInviteRegistrationPage onNavigate={handleNavigate} inviterName="Goldkey Properties" onBack={handleBack} />;
+    if (currentPage === 'add-developer' || currentPage === '/register/developer') return <AddDeveloperPage onNavigate={handleNavigate} onBack={handleBack} />;
+    if (currentPage === 'register' || currentPage === '/register') return <RegisterPage onNavigate={handleNavigate} onBack={handleBack} />;
     if (currentPage === 'developers') return <DevelopersPage onNavigate={handleNavigate} />;
     if (currentPage === 'developer-detail') return <SingleDeveloperPage onNavigate={handleNavigate} userRole={userRole} />;
     if (currentPage === 'search-results') return <SearchResultsPage onNavigate={handleNavigate} />;

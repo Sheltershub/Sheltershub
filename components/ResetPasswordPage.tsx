@@ -1,13 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 
 interface ResetPasswordPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
-const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ onNavigate }) => {
+const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ onNavigate, onBack }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [status, setStatus] = useState<'form' | 'success' | 'error'>('form');
@@ -45,7 +47,17 @@ const ResetPasswordPage: React.FC<ResetPasswordPageProps> = ({ onNavigate }) => 
     <div className="bg-gray-50 min-h-screen font-sans flex flex-col">
       <Header onNavigate={onNavigate} activePage="login" />
 
-      <main className="flex-grow container mx-auto px-4 py-16 flex items-center justify-center">
+      <main className="flex-grow container mx-auto px-4 py-16 flex items-center justify-center relative">
+        <div className="absolute top-12 left-4 md:left-12">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] transition-colors group"
+          >
+            <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm font-bold">Back to Previous Page</span>
+          </button>
+        </div>
+
         <div className="w-full max-w-md">
             
             <div className="text-center mb-8">

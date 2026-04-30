@@ -5,9 +5,15 @@ import Footer from './Footer';
 
 interface AgencyInviteRegistrationPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
+  inviterName?: string;
 }
 
-const AgencyInviteRegistrationPage: React.FC<AgencyInviteRegistrationPageProps> = ({ onNavigate }) => {
+const AgencyInviteRegistrationPage: React.FC<AgencyInviteRegistrationPageProps> = ({ 
+  onNavigate, 
+  onBack,
+  inviterName = 'Goldkey Properties' 
+}) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -85,6 +91,14 @@ const AgencyInviteRegistrationPage: React.FC<AgencyInviteRegistrationPageProps> 
       <Header onNavigate={onNavigate} activePage="agencies" />
 
       <main className="container mx-auto px-4 py-12 max-w-4xl tracking-tight">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] dark:hover:text-brand-orange transition-colors mb-6 group"
+        >
+          <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm font-bold">Back to Previous Page</span>
+        </button>
+
         {submitted ? (
           <div className="bg-white dark:bg-slate-dark-900 rounded-[32px] border border-green-100 dark:border-green-900/30 shadow-2xl p-12 text-center animate-fadeIn">
             <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-green-50 dark:bg-green-900/20 mb-8 border border-green-100 dark:border-green-900/30">
@@ -92,7 +106,7 @@ const AgencyInviteRegistrationPage: React.FC<AgencyInviteRegistrationPageProps> 
             </div>
             <h2 className="text-4xl font-black text-[#0A2B4C] dark:text-white mb-4">Registration Complete!</h2>
             <p className="text-gray-500 dark:text-gray-400 text-lg mb-10 max-w-xl mx-auto font-medium leading-relaxed">
-              Your agency registration is complete and pending admin approval. Upon approval, your agency will be linked to <span className="text-[#0A2B4C] dark:text-brand-blue font-bold">Goldkey Properties</span>.
+              Your agency registration is complete and pending admin approval. Upon approval, your agency will be linked to <span className="text-[#0A2B4C] dark:text-brand-blue font-bold">{inviterName}</span>.
             </p>
             <button 
               onClick={() => onNavigate('login')}
@@ -143,7 +157,7 @@ const AgencyInviteRegistrationPage: React.FC<AgencyInviteRegistrationPageProps> 
               {/* Invitation Notice */}
               <div className="bg-[#E3F2FD] dark:bg-slate-dark-800 border-l-4 border-[#0A2B4C] dark:border-brand-blue p-6 m-8 md:mx-14 rounded-lg">
                 <p className="text-[#0A2B4C] dark:text-gray-200 font-bold text-sm">
-                  You have been invited to register your agency under <span className="font-black underline dark:text-brand-blue">Goldkey Properties</span> on Sheltershub.
+                  You have been invited to register your agency under <span className="font-black underline dark:text-brand-blue">{inviterName}</span> on Sheltershub.
                 </p>
               </div>
 

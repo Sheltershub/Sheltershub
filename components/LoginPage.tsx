@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, ArrowLeft } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigate: (page: string) => void;
   onLogin: (role: string) => void;
+  onBack: () => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin, onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -61,8 +62,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-dark-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors duration-300">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] dark:hover:text-brand-orange transition-colors mb-6 group"
+        >
+          <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm font-bold">Back to Previous Page</span>
+        </button>
+        
+        <div className="text-center">
+          <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
           <img 
             src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" 
             alt="Sheltershub Logo" 
@@ -72,8 +82,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
         <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white mb-2">Welcome Back</h2>
         <p className="text-gray-500 dark:text-gray-400 font-medium">Log in to your Sheltershub account.</p>
       </div>
+    </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-slate-dark-900 py-10 px-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-slate-dark-800 mb-8 relative overflow-hidden">
           {success && (
             <div className="absolute inset-x-0 top-0 bg-green-500 text-white py-3 px-4 text-center font-bold text-sm animate-slideDown z-20">

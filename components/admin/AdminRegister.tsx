@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import AdminLayout from './AdminLayout';
 
 interface AdminRegisterProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
   userRole: string;
 }
 
-const AdminRegister: React.FC<AdminRegisterProps> = ({ onNavigate, userRole }) => {
+const AdminRegister: React.FC<AdminRegisterProps> = ({ onNavigate, onBack, userRole }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,6 +21,14 @@ const AdminRegister: React.FC<AdminRegisterProps> = ({ onNavigate, userRole }) =
   return (
     <AdminLayout onNavigate={onNavigate} activePage="admin-register" title="Create Administrator" userRole={userRole}>
         <div className="max-w-3xl mx-auto">
+            <button 
+              onClick={onBack}
+              className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] transition-colors mb-6 group"
+            >
+              <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+              <span className="text-sm font-bold">Back to Previous Page</span>
+            </button>
+
             {submitted ? (
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 text-center py-16">
                     <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">

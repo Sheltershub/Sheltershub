@@ -1,14 +1,15 @@
 
 import React, { useState } from 'react';
-import { User, Briefcase, Building2, HardHat, CheckCircle2 } from 'lucide-react';
+import { User, Briefcase, Building2, HardHat, CheckCircle2, ArrowLeft } from 'lucide-react';
 
 interface RegisterPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
 type AccountType = 'buyer' | 'agent' | 'agency' | 'developer';
 
-const RegisterPage: React.FC<RegisterPageProps> = ({ onNavigate }) => {
+const RegisterPage: React.FC<RegisterPageProps> = ({ onNavigate, onBack }) => {
   const [selectedType, setSelectedType] = useState<AccountType | null>(null);
 
   const accountTypes = [
@@ -54,8 +55,17 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-dark-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors duration-300">
-      <div className="sm:mx-auto sm:w-full sm:max-w-xl text-center mb-10">
-        <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
+      <div className="sm:mx-auto sm:w-full sm:max-w-xl">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] dark:hover:text-brand-orange transition-colors mb-6 group"
+        >
+          <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm font-bold">Back to Previous Page</span>
+        </button>
+        
+        <div className="text-center mb-10">
+          <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
           <img 
             src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" 
             alt="Sheltershub Logo" 
@@ -65,8 +75,9 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onNavigate }) => {
         <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white mb-2">Create Your Account</h2>
         <p className="text-gray-500 dark:text-gray-400 font-medium tracking-tight">Choose the account type that best describes you.</p>
       </div>
+    </div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
+    <div className="sm:mx-auto sm:w-full sm:max-w-2xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
           {accountTypes.map((type) => {
             const Icon = type.icon;

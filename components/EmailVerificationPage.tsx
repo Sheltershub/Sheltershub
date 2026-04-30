@@ -1,13 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 
 interface EmailVerificationPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
-const EmailVerificationPage: React.FC<EmailVerificationPageProps> = ({ onNavigate }) => {
+const EmailVerificationPage: React.FC<EmailVerificationPageProps> = ({ onNavigate, onBack }) => {
   // State to manage the view: 'pending' (check email), 'success' (verified), 'error' (invalid link)
   // In a real app, this would be determined by a URL token validation
   const [status, setStatus] = useState<'pending' | 'success' | 'error'>('pending');
@@ -30,7 +32,17 @@ const EmailVerificationPage: React.FC<EmailVerificationPageProps> = ({ onNavigat
     <div className="bg-gray-50 min-h-screen font-sans flex flex-col">
       <Header onNavigate={onNavigate} activePage="login" />
 
-      <main className="flex-grow container mx-auto px-4 py-16 flex items-center justify-center">
+      <main className="flex-grow container mx-auto px-4 py-16 flex items-center justify-center relative">
+        <div className="absolute top-12 left-4 md:left-12">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] transition-colors group"
+          >
+            <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm font-bold">Back to Previous Page</span>
+          </button>
+        </div>
+
         <div className="w-full max-w-lg">
             
             {/* Header Area */}

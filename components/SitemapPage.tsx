@@ -35,11 +35,12 @@ const SitemapPage: React.FC<SitemapPageProps> = ({ onNavigate }) => {
         { name: 'Editor Registration', page: 'editor-register' },
     ]},
     { title: 'Public Registration Paths', links: [
-        { name: 'Register as Independent Agency', page: 'add-agency' },
         { name: 'Register as Independent Agent', page: 'add-agent' },
+        { name: 'Register as Independent Agency', page: 'add-agency' },
         { name: 'Register as Developer', page: 'add-developer' },
-        { name: 'Register as Invited Agency', page: 'agency-invite-register' },
-        { name: 'Register as Invited Agent', page: 'agent-invite-register' },
+        { name: 'Register as Invited Agent by Agency', page: 'register-invited-agent-agency' },
+        { name: 'Register as Invited Agent by Developer', page: 'register-invited-agent-developer' },
+        { name: 'Register as Invited Agency by Developer', page: 'register-invited-agency-developer' },
     ]},
     { title: 'Properties', links: [
         { name: 'All Properties', page: 'all-properties' },

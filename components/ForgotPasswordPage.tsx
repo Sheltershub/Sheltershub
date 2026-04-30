@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 
 interface ForgotPasswordPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
-const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onNavigate }) => {
+const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onNavigate, onBack }) => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,7 +28,17 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ onNavigate }) =
     <div className="bg-gray-50 min-h-screen font-sans flex flex-col">
       <Header onNavigate={onNavigate} activePage="login" />
 
-      <main className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center">
+      <main className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center relative">
+        <div className="absolute top-12 left-4 md:left-12">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] transition-colors group"
+          >
+            <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+            <span className="text-sm font-bold">Back to Previous Page</span>
+          </button>
+        </div>
+
         <div className="w-full max-w-md">
             
             {/* Header / Logo Area */}

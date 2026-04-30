@@ -5,9 +5,10 @@ import Footer from './Footer';
 
 interface AddAgentPageProps {
   onNavigate: (page: string) => void;
+  onBack: () => void;
 }
 
-const AddAgentPage: React.FC<AddAgentPageProps> = ({ onNavigate }) => {
+const AddAgentPage: React.FC<AddAgentPageProps> = ({ onNavigate, onBack }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -89,6 +90,14 @@ const AddAgentPage: React.FC<AddAgentPageProps> = ({ onNavigate }) => {
       <Header onNavigate={onNavigate} activePage="add-agent" />
 
       <main className="container mx-auto px-4 py-12 max-w-4xl">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-gray-500 hover:text-[#0A2B4C] dark:hover:text-brand-orange transition-colors mb-6 group"
+        >
+          <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
+          <span className="text-sm font-bold">Back to Previous Page</span>
+        </button>
+
         {submitted ? (
           <div className="bg-white dark:bg-slate-dark-900 rounded-3xl border border-green-100 dark:border-green-900/30 shadow-2xl p-12 text-center animate-fadeIn">
             <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-green-100 dark:bg-green-900/20 mb-8">
