@@ -23,7 +23,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ title, properties, onProper
         ))}
       </div>
       <div className="text-center mt-8">
-        <button className="bg-white dark:bg-[#0A2B4C] border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-semibold py-2 px-6 rounded-full hover:bg-gray-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm">
+        <button className="bg-white dark:bg-slate-dark-900 border border-gray-300 dark:border-slate-dark-800 text-gray-700 dark:text-gray-200 font-semibold py-2 px-6 rounded-full hover:bg-gray-100 dark:hover:bg-slate-dark-800 transition-colors shadow-sm">
           More Properties
         </button>
       </div>

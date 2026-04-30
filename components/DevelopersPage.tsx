@@ -86,14 +86,14 @@ interface DevelopersPageProps {
 
 const DevelopersPage: React.FC<DevelopersPageProps> = ({ onNavigate }) => {
   return (
-    <div className="bg-gray-50 min-h-screen font-sans">
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen font-sans transition-colors duration-300">
       <Header onNavigate={onNavigate} activePage="developers" />
 
       {/* Page Title Section */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-slate-dark-900 border-b border-gray-200 dark:border-slate-dark-800">
         <div className="container mx-auto px-4 py-10">
-            <h1 className="text-3xl font-bold text-[#0A2B4C] mb-2">Developers</h1>
-            <p className="text-gray-500 text-lg">Browse trusted real estate developers and their projects.</p>
+            <h1 className="text-3xl font-bold text-[#0A2B4C] dark:text-white mb-2">Developers</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-lg">Browse trusted real estate developers and their projects.</p>
         </div>
       </div>
 
@@ -102,7 +102,7 @@ const DevelopersPage: React.FC<DevelopersPageProps> = ({ onNavigate }) => {
         {/* Developers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
             {developers.map((dev) => (
-                <div key={dev.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
+                <div key={dev.id} className="bg-white dark:bg-slate-dark-900 rounded-xl border border-gray-200 dark:border-slate-dark-800 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group flex flex-col h-full">
                     <div className="h-48 overflow-hidden relative">
                          <img src={dev.logo} alt={dev.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80"></div>
@@ -115,10 +115,10 @@ const DevelopersPage: React.FC<DevelopersPageProps> = ({ onNavigate }) => {
                          </div>
                     </div>
                     <div className="p-5 flex-grow flex flex-col">
-                        <p className="text-sm text-gray-600 mb-6 leading-relaxed line-clamp-3">{dev.description}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed line-clamp-3">{dev.description}</p>
                         
-                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-[#0A2B4C]">
+                        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-slate-dark-800 flex items-center justify-between">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-slate-dark-800 text-[#0A2B4C] dark:text-blue-300">
                                 {dev.projectsCount} Projects
                             </span>
                             <button 
@@ -135,7 +135,7 @@ const DevelopersPage: React.FC<DevelopersPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Call to Action */}
-        <div className="bg-[#0A2B4C] rounded-2xl p-8 md:p-16 text-center relative overflow-hidden shadow-xl">
+        <div className="bg-[#0A2B4C] dark:bg-brand-blue-dark rounded-2xl p-8 md:p-16 text-center relative overflow-hidden shadow-xl">
             <div className="relative z-10 max-w-3xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Are you a developer?</h2>
                 <p className="text-blue-100 text-lg mb-8">

@@ -13,12 +13,15 @@ import ForSalePage from './components/ForSalePage';
 import AgentsPage from './components/AgentsPage';
 import SingleAgentPage from './components/SingleAgentPage';
 import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 import SingleProperty from './components/SingleProperty';
 import AddPropertyPage from './components/AddPropertyPage';
 import AgenciesPage from './components/AgenciesPage';
 import SingleAgencyPage from './components/SingleAgencyPage';
 import AddAgencyPage from './components/AddAgencyPage';
 import AddAgentPage from './components/AddAgentPage';
+import AgentInviteRegistrationPage from './components/AgentInviteRegistrationPage';
+import AgencyInviteRegistrationPage from './components/AgencyInviteRegistrationPage';
 import AddDeveloperPage from './components/AddDeveloperPage';
 import DevelopersPage from './components/DevelopersPage';
 import SingleDeveloperPage from './components/SingleDeveloperPage';
@@ -48,6 +51,15 @@ import TownhouseForRentPage from './components/TownhouseForRentPage';
 import TownhouseForSalePage from './components/TownhouseForSalePage';
 import OfficeForRentPage from './components/OfficeForRentPage';
 import OfficeForSalePage from './components/OfficeForSalePage';
+
+// Buyer Pages
+import BuyerProfilePage from './components/buyer/BuyerProfilePage';
+import BuyerEditProfilePage from './components/buyer/BuyerEditProfilePage';
+import BuyerSavedPropertiesPage from './components/buyer/BuyerSavedPropertiesPage';
+import BuyerMessagesPage from './components/buyer/BuyerMessagesPage';
+import BuyerRecentActivityPage from './components/buyer/BuyerRecentActivityPage';
+import PropertiesPage from './components/buyer/PropertiesPage';
+import PropertyDetailsPage from './components/buyer/PropertyDetailsPage';
 
 // Admin Pages
 import AdminDashboard from './components/admin/AdminDashboard';
@@ -243,9 +255,12 @@ const App: React.FC = () => {
     if (currentPage === 'compare-properties') return <ComparePropertiesPage onNavigate={handleNavigate} />;
     if (currentPage === 'agencies') return <AgenciesPage onNavigate={handleNavigate} />;
     if (currentPage === 'agency-detail') return <SingleAgencyPage onNavigate={handleNavigate} userRole={userRole} />;
-    if (currentPage === 'add-agency') return <AddAgencyPage onNavigate={handleNavigate} />;
-    if (currentPage === 'add-agent') return <AddAgentPage onNavigate={handleNavigate} />;
-    if (currentPage === 'add-developer') return <AddDeveloperPage onNavigate={handleNavigate} />;
+    if (currentPage === 'add-agency' || currentPage === '/register/agency') return <AddAgencyPage onNavigate={handleNavigate} />;
+    if (currentPage === 'add-agent' || currentPage === '/register/agent') return <AddAgentPage onNavigate={handleNavigate} />;
+    if (currentPage === 'agent-invite-register' || currentPage === '/register/agent/invite') return <AgentInviteRegistrationPage onNavigate={handleNavigate} />;
+    if (currentPage === 'agency-invite-register' || currentPage === '/register/agency/invite') return <AgencyInviteRegistrationPage onNavigate={handleNavigate} />;
+    if (currentPage === 'add-developer' || currentPage === '/register/developer') return <AddDeveloperPage onNavigate={handleNavigate} />;
+    if (currentPage === 'register' || currentPage === '/register') return <RegisterPage onNavigate={handleNavigate} />;
     if (currentPage === 'developers') return <DevelopersPage onNavigate={handleNavigate} />;
     if (currentPage === 'developer-detail') return <SingleDeveloperPage onNavigate={handleNavigate} userRole={userRole} />;
     if (currentPage === 'search-results') return <SearchResultsPage onNavigate={handleNavigate} />;
@@ -259,6 +274,18 @@ const App: React.FC = () => {
     if (currentPage === 'report-fraud') return <ReportFraudPage onNavigate={handleNavigate} userRole={userRole} />;
     if (currentPage === 'user-profile') return <UserProfilePage onNavigate={handleNavigate} />;
     if (currentPage === '404') return <NotFoundPage onNavigate={handleNavigate} />;
+
+    // Buyer Module Routes
+    if (currentPage === 'buyer-profile') return <BuyerProfilePage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage === 'buyer-profile-edit') return <BuyerEditProfilePage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage === 'buyer-saved-properties') return <BuyerSavedPropertiesPage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage === 'buyer-messages') return <BuyerMessagesPage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage === 'buyer-recent') return <BuyerRecentActivityPage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage === 'properties') return <PropertiesPage onNavigate={handleNavigate} userRole={userRole} />;
+    if (currentPage.startsWith('property-')) {
+        const id = parseInt(currentPage.replace('property-', ''));
+        return <PropertyDetailsPage onNavigate={handleNavigate} propertyId={id} userRole={userRole} />;
+    }
 
     // Home Page
     return (
@@ -316,7 +343,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-[#001021] min-h-screen font-sans transition-colors duration-300">
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen font-sans transition-colors duration-300">
       {renderContent()}
     </div>
   );

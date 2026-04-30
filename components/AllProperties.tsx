@@ -7,15 +7,15 @@ import { allPropertiesList } from '../constants';
 const Pagination: React.FC = () => (
   <div className="flex justify-center mt-12 gap-2">
     <button className="w-10 h-10 flex items-center justify-center rounded bg-[#0A2B4C] text-white font-semibold shadow-sm">1</button>
-    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-[#0A2B4C] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-blue-900/30 font-semibold transition-colors">2</button>
-    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-[#0A2B4C] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-blue-900/30 font-semibold transition-colors">3</button>
-    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-[#0A2B4C] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-blue-900/30 font-semibold transition-colors">...</button>
-    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-[#0A2B4C] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-blue-900/30 font-semibold transition-colors">10</button>
+    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-slate-dark-900 border border-gray-200 dark:border-slate-dark-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-dark-800 font-semibold transition-colors">2</button>
+    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-slate-dark-900 border border-gray-200 dark:border-slate-dark-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-dark-800 font-semibold transition-colors">3</button>
+    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-slate-dark-900 border border-gray-200 dark:border-slate-dark-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-dark-800 font-semibold transition-colors">...</button>
+    <button className="w-10 h-10 flex items-center justify-center rounded bg-white dark:bg-slate-dark-900 border border-gray-200 dark:border-slate-dark-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-dark-800 font-semibold transition-colors">10</button>
   </div>
 );
 
 const ActiveFilterPill: React.FC<{ label: string; onRemove?: () => void }> = ({ label, onRemove }) => (
-  <span className="inline-flex items-center bg-white dark:bg-[#0A2B4C] border border-gray-200 dark:border-gray-700 rounded px-3 py-1 text-sm text-gray-600 dark:text-gray-300 shadow-sm transition-shadow hover:shadow-md">
+  <span className="inline-flex items-center bg-white dark:bg-slate-dark-900 border border-gray-200 dark:border-slate-dark-800 rounded px-3 py-1 text-sm text-gray-600 dark:text-gray-300 shadow-sm transition-shadow hover:shadow-md">
     {label}
     <button 
         onClick={onRemove}
@@ -28,7 +28,7 @@ const ActiveFilterPill: React.FC<{ label: string; onRemove?: () => void }> = ({ 
 );
 
 const SortButton: React.FC<{ label: string; active?: boolean; direction?: 'up' | 'down' }> = ({ label, active, direction }) => (
-    <button className={`px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 -ml-px first:ml-0 first:rounded-l last:rounded-r transition-colors flex items-center gap-2 ${active ? 'bg-[#0A2B4C] text-white border-[#0A2B4C] dark:bg-brand-orange dark:text-brand-blue dark:border-brand-orange z-10' : 'bg-white dark:bg-brand-blue-dark text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-blue-900/30'}`}>
+    <button className={`px-4 py-2 text-sm border border-gray-300 dark:border-slate-dark-800 -ml-px first:ml-0 first:rounded-l last:rounded-r transition-colors flex items-center gap-2 ${active ? 'bg-[#0A2B4C] text-white border-[#0A2B4C] dark:bg-brand-orange dark:text-brand-blue dark:border-brand-orange z-10' : 'bg-white dark:bg-slate-dark-900 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-dark-800'}`}>
         {label}
         {direction && (
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -56,9 +56,9 @@ const AllProperties: React.FC<{ onNavigate: (page: string) => void }> = ({ onNav
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-950 min-h-screen pb-12 transition-colors duration-300">
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen pb-12 transition-colors duration-300">
         {/* Breadcrumb Area */}
-        <div className="bg-white dark:bg-brand-blue-dark border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-slate-dark-900 border-b border-gray-200 dark:border-slate-dark-800">
              <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <button onClick={() => onNavigate('home')} className="hover:text-[#0A2B4C] dark:hover:text-brand-orange transition-colors">Home</button>

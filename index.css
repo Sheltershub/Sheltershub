@@ -1,0 +1,40 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+  border-radius: 0px !important;
+}
+
+body {
+  font-family: 'Figtree', sans-serif;
+  font-weight: 500;
+}
+
+p:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+label:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+input:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+button:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+a:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+select:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+textarea:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *), 
+span:not(h1 *, h2 *, h3 *, h4 *, h5 *, h6 *) {
+  font-weight: 500 !important;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}

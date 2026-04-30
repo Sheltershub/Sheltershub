@@ -13,11 +13,11 @@ const SearchPill: React.FC<{ text: string; active: boolean; onClick: () => void 
 );
 
 const CustomSelect: React.FC<{ placeholder: string }> = ({ placeholder }) => (
-    <div className="relative w-full bg-gray-100 dark:bg-brand-blue-dark/50 rounded">
-        <select className="w-full py-1.5 px-3 bg-transparent text-gray-500 dark:text-gray-300 appearance-none focus:outline-none">
-            <option className="dark:bg-brand-blue-dark">{placeholder}</option>
-            <option className="dark:bg-brand-blue-dark">Option 1</option>
-            <option className="dark:bg-brand-blue-dark">Option 2</option>
+    <div className="relative w-full bg-gray-100 dark:bg-slate-dark-800 rounded">
+        <select className="w-full py-1.5 px-3 bg-transparent text-gray-500 dark:text-gray-200 appearance-none focus:outline-none">
+            <option className="dark:bg-slate-dark-900">{placeholder}</option>
+            <option className="dark:bg-slate-dark-900">Option 1</option>
+            <option className="dark:bg-slate-dark-900">Option 2</option>
         </select>
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-400">
             <svg className="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
@@ -49,14 +49,14 @@ const NumericInput: React.FC<{ placeholder: string }> = ({ placeholder }) => {
   };
 
   return (
-    <div className="relative w-full bg-gray-100 dark:bg-brand-blue-dark/50 rounded">
+    <div className="relative w-full bg-gray-100 dark:bg-slate-dark-800 rounded">
       <input
         type="number"
         min="0"
         value={value}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full py-1.5 px-3 bg-transparent text-gray-500 dark:text-gray-300 appearance-none focus:outline-none [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-8"
+        className="w-full py-1.5 px-3 bg-transparent text-gray-500 dark:text-gray-200 appearance-none focus:outline-none [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pr-8"
         aria-label={placeholder}
       />
       <div className="absolute inset-y-0 right-0 flex flex-col items-center justify-center px-2 text-gray-700 dark:text-gray-400">
@@ -100,7 +100,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
         <SearchPill text="FOR SALE" active={activeTab === 'For Sale'} onClick={() => setActiveTab('For Sale')} />
         <SearchPill text="LAND" active={activeTab === 'Land'} onClick={() => setActiveTab('Land')} />
       </div>
-      <div className="bg-[#082956] dark:bg-brand-blue-dark p-6 rounded-b-lg rounded-r-lg shadow-lg">
+      <div className="bg-[#082956] dark:bg-slate-dark-900 p-6 rounded-b-lg rounded-r-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
             <CustomSelect placeholder="Property Type" />
             <CustomSelect placeholder="Region" />

@@ -33,7 +33,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#082956] rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden group transition-all duration-300 shadow-sm hover:shadow-lg flex flex-col h-full">
+    <div className="bg-white dark:bg-slate-dark-900 rounded-xl border border-gray-200 dark:border-slate-dark-800 overflow-hidden group transition-all duration-300 shadow-sm hover:shadow-lg flex flex-col h-full">
       <div className="relative cursor-pointer" onClick={handleCardClick}>
         <img src={property.images[currentImageIndex]} alt={property.name} className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105" />
 
@@ -43,7 +43,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick }) => {
           </span>
           {/* Only show 'Days Ago' if not Sold */}
           {property.status !== PropertyStatus.Sold && (
-             <span className="bg-white dark:bg-brand-blue-dark dark:text-gray-200 text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-md shadow">{property.daysAgo} Days Ago</span>
+             <span className="bg-white dark:bg-slate-dark-800 dark:text-gray-200 text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-md shadow">{property.daysAgo} Days Ago</span>
           )}
         </div>
 
@@ -82,7 +82,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick }) => {
 
         <h3 className="font-bold text-lg text-[#0A2B4C] dark:text-white truncate mb-4 group-hover:text-[#F9A826] transition-colors">{property.name}</h3>
         
-        <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100 dark:border-slate-dark-800">
             <div className="flex flex-col items-center">
                 <div className="flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
                     <BedIcon className="w-4 h-4 text-gray-400 dark:text-gray-500" />

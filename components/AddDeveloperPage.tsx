@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { Eye, EyeOff, CheckCircle2, Upload, ArrowRight, ArrowLeft, Camera, ShieldCheck, Mail, Phone, Lock, User, MapPin, Building, Globe, Info, Calendar, FileText } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 
@@ -8,320 +8,626 @@ interface AddDeveloperPageProps {
 }
 
 const AddDeveloperPage: React.FC<AddDeveloperPageProps> = ({ onNavigate }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [projectImages, setProjectImages] = useState<string[]>([]);
-  const [dragActive, setDragActive] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    // Step 1: Account Setup
+    adminFullName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    // Step 2: Company Profile
+    companyName: '',
+    companyRegNumber: '',
+    physicalAddress: '',
+    digitalAddress: '',
+    companyDescription: '',
+    companyLogo: null as File | null,
+    contactEmail: '',
+    websiteUrl: '',
+    yearEstablished: '',
+    activeProjects: '',
+    // Step 3: Identity Verification
+    idType: '',
+    idNumber: '',
+    idFront: null as File | null,
+    idBack: null as File | null,
+    incorporationCert: null as File | null,
+    directorId: null as File | null,
+  });
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const url = URL.createObjectURL(e.target.files[0]);
-      setLogoPreview(url);
+  const [previews, setPreviews] = useState({
+    companyLogo: null as string | null,
+    idFront: null as string | null,
+    idBack: null as string | null,
+    incorporationCert: null as string | null,
+    directorId: null as string | null
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof typeof previews) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, [field]: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviews(prev => ({ ...prev, [field]: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  // Mock handling for project images
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
+  const nextStep = () => {
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-       // Mock adding an image
-       if (projectImages.length < 6) {
-         setProjectImages([...projectImages, "https://i.ibb.co/NnZzSLFd/Sample-Card-Image.jpg"]);
-       }
-    }
-  };
-
-  const addMockProjectImage = () => {
-      if (projectImages.length < 6) {
-        setProjectImages([...projectImages, "https://i.ibb.co/NnZzSLFd/Sample-Card-Image.jpg"]);
-      }
-  };
-
-  const removeProjectImage = (index: number) => {
-    const newImages = [...projectImages];
-    newImages.splice(index, 1);
-    setProjectImages(newImages);
+  const prevStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setTimeout(() => {
-      setSubmitted(true);
-      window.scrollTo(0, 0);
-    }, 800);
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return (
-    <div className="bg-gray-50 min-h-screen font-sans">
-      <Header onNavigate={onNavigate} activePage="add-developer" />
+  const steps = [
+    { number: 1, title: 'Account Setup', icon: Lock },
+    { number: 2, title: 'Company Profile', icon: Building },
+    { number: 3, title: 'Identity Verification', icon: ShieldCheck },
+  ];
 
-      <main className="container mx-auto px-4 py-12 max-w-6xl">
-        
+  return (
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen font-sans transition-colors duration-300">
+      <Header onNavigate={onNavigate} activePage="developers" />
+
+      <main className="container mx-auto px-4 py-12 max-w-4xl tracking-tight">
         {submitted ? (
-          /* Confirmation Section */
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 text-center py-16 max-w-2xl mx-auto">
-            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
-                <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+          <div className="bg-white dark:bg-slate-dark-900 rounded-[32px] border border-orange-100 dark:border-orange-900/30 shadow-2xl p-12 text-center animate-fadeIn">
+            <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-orange-50 dark:bg-orange-900/20 mb-8 border border-orange-100 dark:border-orange-900/30">
+              <CheckCircle2 className="h-12 w-12 text-[#F9A826]" />
             </div>
-            <h2 className="text-3xl font-bold text-[#0A2B4C] mb-4">Registration Submitted!</h2>
-            <p className="text-gray-600 text-lg mb-2">
-                Your developer profile has been submitted for admin review.
+            <h2 className="text-4xl font-black text-[#0A2B4C] dark:text-white mb-4">Account Submitted!</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-10 max-w-xl mx-auto font-medium leading-relaxed">
+              Your developer account has been submitted for verification. Admin will review your documents and notify you by email.
             </p>
-            <p className="text-sm text-gray-500 mb-8 max-w-md mx-auto">
-                Our team will verify your details within 24-48 hours. You will receive an email notification once your profile is live.
-            </p>
-            <div className="flex justify-center gap-4">
-                 <button 
-                    onClick={() => onNavigate('home')}
-                    className="py-3 px-8 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-                 >
-                    Back to Home
-                 </button>
-                 <button 
-                    onClick={() => onNavigate('developers')}
-                    className="py-3 px-8 bg-[#0A2B4C] text-white font-bold rounded-lg hover:bg-[#08223c] shadow-md transition-colors"
-                 >
-                    View Developers
-                 </button>
-            </div>
+            <button 
+              onClick={() => onNavigate('home')}
+              className="py-4 px-10 bg-[#0A2B4C] text-white font-black rounded-2xl hover:bg-[#08223c] transition-all shadow-xl shadow-[#0A2B4C]/20 transform active:scale-95"
+            >
+              Return Home
+            </button>
           </div>
         ) : (
-          /* Registration Form & Guidance Section */
           <>
-            <div className="text-center mb-10">
-                <h1 className="text-3xl font-bold text-[#0A2B4C] mb-3">Register as a Developer</h1>
-                <p className="text-gray-500 max-w-2xl mx-auto">
-                    Showcase your development projects and attract investors and homebuyers on Sheltershub.
-                </p>
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-black text-[#0A2B4C] dark:text-white mb-3">Developer Registration</h1>
+              <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-medium text-lg">
+                Register your property development company on Sheltershub to manage projects, agencies, and agents.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* Progress Stepper */}
+            <div className="flex justify-between items-center mb-16 relative px-12 max-w-3xl mx-auto">
+              <div className="absolute left-16 right-16 top-1/2 h-px bg-gray-200 dark:bg-slate-dark-800 -translate-y-1/2 z-0"></div>
+              {steps.map((step) => {
+                const StepIcon = step.icon;
+                const isActive = currentStep === step.number;
+                const isCompleted = currentStep > step.number;
                 
-                {/* Form Column */}
-                <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div className="bg-[#0A2B4C] px-6 py-4 border-b border-[#08223c]">
-                        <h2 className="text-white font-semibold text-lg">Developer Details</h2>
+                return (
+                  <div key={step.number} className="relative z-10 flex flex-col items-center">
+                    <div className={`h-14 w-14 rounded-full flex items-center justify-center transition-all duration-500 border-4 ${
+                      isActive 
+                        ? 'bg-[#F9A826] border-white dark:border-slate-dark-900 text-white shadow-xl shadow-[#F9A826]/30' 
+                        : isCompleted 
+                          ? 'bg-green-500 border-white dark:border-slate-dark-900 text-white' 
+                          : 'bg-white dark:bg-slate-dark-800 border-gray-100 dark:border-slate-dark-700 text-gray-300 dark:text-slate-dark-500'
+                    }`}>
+                      {isCompleted ? <CheckCircle2 size={24} /> : <StepIcon size={22} />}
+                    </div>
+                    <div className={`absolute top-16 whitespace-nowrap text-[10px] font-black uppercase tracking-[0.2em] ${
+                      isActive ? 'text-[#F9A826]' : 'text-gray-400 dark:text-slate-dark-500'
+                    }`}>
+                      {step.title}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="bg-white dark:bg-slate-dark-900 rounded-[40px] border border-gray-100 dark:border-slate-dark-800 shadow-3xl overflow-hidden mt-16 transition-all duration-700">
+              <form onSubmit={handleSubmit} className="p-8 md:p-14">
+                
+                {/* Step 1: Account Setup */}
+                {currentStep === 1 && (
+                  <div className="space-y-8 animate-fadeIn">
+                    <div className="flex items-center gap-4 border-l-4 border-[#F9A826] pl-6 mb-10">
+                      <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white">Account Setup</h2>
                     </div>
                     
-                    <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-8">
-                        
-                        {/* Basic Info */}
-                        <div className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Developer / Company Name <span className="text-red-500">*</span></label>
-                                <input type="text" required placeholder="e.g. Empire Builders" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" />
-                            </div>
+                    <div className="grid grid-cols-1 gap-7">
+                      <div>
+                        <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Administrator Full Name</label>
+                        <div className="relative group">
+                          <User className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F9A826] transition-colors" size={20} />
+                          <input 
+                            name="adminFullName"
+                            value={formData.adminFullName}
+                            onChange={handleInputChange}
+                            type="text" 
+                            required 
+                            placeholder="e.g. Kwabena Mensah" 
+                            className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-14 pr-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                          />
+                        </div>
+                      </div>
 
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Logo / Photo</label>
-                                <div className="flex items-center gap-6">
-                                    <div className="h-24 w-24 bg-gray-100 rounded-lg border border-gray-300 flex items-center justify-center overflow-hidden">
-                                        {logoPreview ? (
-                                            <img src={logoPreview} alt="Preview" className="h-full w-full object-cover" />
-                                        ) : (
-                                            <svg className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <input 
-                                            type="file" 
-                                            accept="image/*"
-                                            onChange={handleLogoChange}
-                                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-[#0A2B4C] hover:file:bg-blue-100 cursor-pointer" 
-                                        />
-                                        <p className="text-xs text-gray-500 mt-2">Recommended size: 500x500px. Max file size: 2MB.</p>
-                                    </div>
-                                </div>
-                            </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                        <div>
+                          <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Email Address</label>
+                          <div className="relative group">
+                            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F9A826] transition-colors" size={20} />
+                            <input 
+                              name="email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              type="email" 
+                              required 
+                              placeholder="admin@developer.com" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-14 pr-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Phone / WhatsApp Number</label>
+                          <div className="relative group">
+                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold group-focus-within:text-[#F9A826] transition-colors tracking-tight">+233</span>
+                            <input 
+                              name="phone"
+                              value={formData.phone}
+                              onChange={handleInputChange}
+                              type="text" 
+                              required 
+                              placeholder="24 123 4567" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-20 pr-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                        </div>
+                      </div>
 
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                        <div>
+                          <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Password</label>
+                          <div className="relative group">
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F9A826] transition-colors" size={20} />
+                            <input 
+                              name="password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              type={showPassword ? 'text' : 'password'} 
+                              required 
+                              placeholder="••••••••" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-14 pr-14 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                            <button 
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#F9A826] transition-colors"
+                            >
+                              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Confirm Password</label>
+                          <div className="relative group">
+                            <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#F9A826] transition-colors" size={20} />
+                            <input 
+                              name="confirmPassword"
+                              value={formData.confirmPassword}
+                              onChange={handleInputChange}
+                              type="password" 
+                              required 
+                              placeholder="••••••••" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-14 pr-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 2: Company Profile */}
+                {currentStep === 2 && (
+                  <div className="space-y-10 animate-fadeIn">
+                    <div className="flex items-center gap-4 border-l-4 border-[#F9A826] pl-6 mb-10">
+                      <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white">Company Profile</h2>
+                    </div>
+
+                    <div className="space-y-10">
+                      <div>
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="h-6 w-1.5 bg-[#0A2B4C] dark:bg-[#F9A826] rounded-full"></div>
+                            <h3 className="text-sm font-black text-[#0A2B4C] dark:text-white uppercase tracking-[0.2em]">Company Details</h3>
+                        </div>
+                        <div className="grid grid-cols-1 gap-7">
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Developer / Company Name</label>
+                            <input 
+                              name="companyName"
+                              value={formData.companyName}
+                              onChange={handleInputChange}
+                              type="text" 
+                              required 
+                              placeholder="e.g. Goldkey Properties Ltd" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">Location <span className="text-red-500">*</span></label>
-                                <div className="relative">
-                                    <select className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] appearance-none bg-white">
-                                        <option>Select City / Region</option>
-                                        <option>Greater Accra</option>
-                                        <option>Kumasi</option>
-                                        <option>Takoradi</option>
-                                        <option>International</option>
-                                    </select>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </div>
-                                </div>
+                              <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Company Registration Number</label>
+                              <input 
+                                name="companyRegNumber"
+                                value={formData.companyRegNumber}
+                                onChange={handleInputChange}
+                                type="text" 
+                                required 
+                                placeholder="e.g. CS12345678" 
+                                className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                              />
                             </div>
+                            <div>
+                                <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Physical Address</label>
+                                <input 
+                                    name="physicalAddress"
+                                    value={formData.physicalAddress}
+                                    onChange={handleInputChange}
+                                    type="text" 
+                                    required 
+                                    placeholder="e.g. Airport City, One Airport Square" 
+                                    className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                                />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Digital Address (GhanaPostGPS)</label>
+                            <input 
+                              name="digitalAddress"
+                              value={formData.digitalAddress}
+                              onChange={handleInputChange}
+                              type="text" 
+                              placeholder="e.g. GA-001-2024" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Company Description</label>
+                            <textarea 
+                              name="companyDescription"
+                              value={formData.companyDescription}
+                              onChange={handleInputChange}
+                              required
+                              rows={4} 
+                              placeholder="Describe your company, active developments, and areas of operation." 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Upload Company Logo</label>
+                            <div 
+                              onClick={() => document.getElementById('companyLogoInput')?.click()}
+                              className="relative border-2 border-dashed border-gray-100 dark:border-slate-dark-800 bg-gray-50/30 dark:bg-slate-dark-950 rounded-[32px] p-10 flex flex-col items-center justify-center cursor-pointer hover:border-[#F9A826] hover:bg-[#F9A826]/5 shadow-sm transition-all group overflow-hidden h-40"
+                            >
+                              {previews.companyLogo ? (
+                                <img src={previews.companyLogo} alt="Logo Preview" className="h-full object-contain animate-fadeIn" />
+                              ) : (
+                                <>
+                                  <Camera size={38} className="text-gray-200 dark:text-slate-dark-800 mb-3 group-hover:text-[#F9A826] group-hover:scale-110 transition-all duration-500" />
+                                  <span className="text-[10px] font-black text-[#0A2B4C] dark:text-slate-dark-400 uppercase tracking-[0.3em]">Select Logo</span>
+                                  <span className="text-[9px] text-gray-400 dark:text-slate-dark-600 mt-2 font-bold">JPG/PNG • MAX 5MB</span>
+                                </>
+                              )}
+                              <input 
+                                id="companyLogoInput"
+                                type="file" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={(e) => handleFileChange(e, 'companyLogo')}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="h-6 w-1.5 bg-[#0A2B4C] dark:bg-[#F9A826] rounded-full"></div>
+                            <h3 className="text-sm font-black text-[#0A2B4C] dark:text-white uppercase tracking-[0.2em]">Contact & Additional Details</h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Primary Contact Email</label>
+                            <input 
+                              name="contactEmail"
+                              value={formData.contactEmail}
+                              onChange={handleInputChange}
+                              type="email" 
+                              required 
+                              placeholder="info@developer.com" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Website URL</label>
+                            <input 
+                              name="websiteUrl"
+                              value={formData.websiteUrl}
+                              onChange={handleInputChange}
+                              type="url" 
+                              placeholder="https://www.developer.com" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Year Established</label>
+                            <div className="relative">
+                                <Calendar className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 dark:text-slate-dark-600" size={18} />
+                                <input 
+                                    name="yearEstablished"
+                                    value={formData.yearEstablished}
+                                    onChange={handleInputChange}
+                                    type="number" 
+                                    required 
+                                    placeholder="e.g. 2010" 
+                                    className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl pl-12 pr-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                                />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">Number of Active Projects</label>
+                            <input 
+                              name="activeProjects"
+                              value={formData.activeProjects}
+                              onChange={handleInputChange}
+                              type="number" 
+                              placeholder="e.g. 5" 
+                              className="w-full bg-gray-50/50 dark:bg-slate-dark-950 border border-gray-200 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base focus:outline-none focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 font-medium transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 3: Identity Verification */}
+                {currentStep === 3 && (
+                  <div className="space-y-12 animate-fadeIn">
+                    <div className="flex items-center gap-4 border-l-4 border-[#F9A826] pl-6 mb-10">
+                      <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white">Identity Verification</h2>
+                    </div>
+
+                    <div className="space-y-12">
+                      <div>
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="h-6 w-1.5 bg-[#0A2B4C] dark:bg-[#F9A826] rounded-full"></div>
+                            <h3 className="text-sm font-black text-[#0A2B4C] dark:text-white uppercase tracking-[0.2em]">Administrator Identity</h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">ID Type</label>
+                            <select 
+                              name="idType"
+                              value={formData.idType}
+                              onChange={handleInputChange}
+                              required
+                              className="w-full bg-gray-50 dark:bg-slate-dark-950 border border-gray-100 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base font-medium focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 outline-none appearance-none transition-all text-gray-700 dark:text-gray-200"
+                            >
+                              <option value="">Select ID Type</option>
+                              <option value="Ghana Card">Ghana Card</option>
+                              <option value="Passport">Passport</option>
+                              <option value="Voter ID">Voter ID</option>
+                              <option value="Driver's Licence">Driver's Licence</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2.5 ml-1">ID Number</label>
+                            <input 
+                              name="idNumber"
+                              value={formData.idNumber}
+                              onChange={handleInputChange}
+                              type="text" 
+                              required 
+                              placeholder="Enter ID number" 
+                              className="w-full bg-gray-50 dark:bg-slate-dark-950 border border-gray-100 dark:border-slate-dark-800 rounded-2xl px-6 py-4.5 text-base font-medium focus:border-[#F9A826] focus:ring-4 focus:ring-[#F9A826]/5 outline-none transition-all text-gray-700 dark:text-gray-200" 
+                            />
+                          </div>
                         </div>
 
-                        <div className="border-t border-gray-100 pt-6"></div>
-
-                        {/* Contact Info */}
-                        <div>
-                            <h3 className="text-lg font-bold text-[#0A2B4C] mb-4">Contact Information</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
-                                    <input type="email" required placeholder="contact@empirebuilders.com" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number <span className="text-red-500">*</span></label>
-                                    <input type="tel" required placeholder="+233 00 000 0000" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" />
-                                </div>
-                                <div className="md:col-span-2">
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Website</label>
-                                    <input type="url" placeholder="https://www.empirebuilders.com" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="border-t border-gray-100 pt-6"></div>
-
-                        {/* Profile & Portfolio */}
-                        <div>
-                             <h3 className="text-lg font-bold text-[#0A2B4C] mb-4">Professional Profile</h3>
-                             <div className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Description / About Developer <span className="text-red-500">*</span></label>
-                                    <textarea required rows={5} placeholder="Describe your company, vision, and major achievements..." className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]"></textarea>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Years of Experience</label>
-                                    <input type="number" min="0" placeholder="e.g. 10" className="w-full md:w-1/2 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Portfolio / Projects Summary</label>
-                                    <textarea rows={4} placeholder="List key projects, developments, or areas of specialization..." className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]"></textarea>
-                                </div>
-                             </div>
-                        </div>
-
-                        <div className="border-t border-gray-100 pt-6"></div>
-
-                        {/* Project Images Upload */}
-                        <div>
-                             <h3 className="text-lg font-bold text-[#0A2B4C] mb-4">Project Gallery</h3>
-                             <p className="text-sm text-gray-500 mb-4">Upload images of your past or current projects (Optional).</p>
-                             
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                          <div>
+                             <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Upload ID (Front)</label>
                              <div 
-                                className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${dragActive ? 'border-[#F9A826] bg-orange-50' : 'border-gray-300 hover:border-gray-400'}`}
-                                onDragEnter={handleDrag}
-                                onDragLeave={handleDrag}
-                                onDragOver={handleDrag}
-                                onDrop={handleDrop}
+                               onClick={() => document.getElementById('idFrontInputDev')?.click()}
+                               className="relative border-2 border-dashed border-gray-100 dark:border-slate-dark-800 bg-gray-50/20 dark:bg-slate-dark-950 rounded-[32px] p-10 flex flex-col items-center justify-center cursor-pointer hover:border-[#F9A826] hover:bg-[#F9A826]/5 transition-all group overflow-hidden h-44"
+                             >
+                               {previews.idFront ? (
+                                 <img src={previews.idFront} alt="ID Front Preview" className="absolute inset-0 w-full h-full object-cover animate-fadeIn" />
+                               ) : (
+                                 <>
+                                   <Camera size={34} className="text-gray-200 dark:text-slate-dark-800 mb-3 group-hover:text-[#F9A826] transition-all" />
+                                   <span className="text-[10px] font-black text-[#0A2B4C] dark:text-slate-dark-400 uppercase tracking-widest">Front Side</span>
+                                   <span className="text-[8px] text-gray-400 dark:text-slate-dark-600 mt-2 font-bold uppercase tracking-widest shadow-sm px-3 py-1 bg-white dark:bg-slate-dark-800 rounded-full">5MB MAX</span>
+                                 </>
+                               )}
+                               <input 
+                                 id="idFrontInputDev"
+                                 type="file" 
+                                 className="hidden" 
+                                 accept="image/*"
+                                 onChange={(e) => handleFileChange(e, 'idFront')}
+                               />
+                             </div>
+                          </div>
+                          <div>
+                             <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Upload ID (Back)</label>
+                             <div 
+                               onClick={() => document.getElementById('idBackInputDev')?.click()}
+                               className="relative border-2 border-dashed border-gray-100 dark:border-slate-dark-800 bg-gray-50/20 dark:bg-slate-dark-950 rounded-[32px] p-10 flex flex-col items-center justify-center cursor-pointer hover:border-[#F9A826] hover:bg-[#F9A826]/5 transition-all group overflow-hidden h-44"
+                             >
+                               {previews.idBack ? (
+                                 <img src={previews.idBack} alt="ID Back Preview" className="absolute inset-0 w-full h-full object-cover animate-fadeIn" />
+                               ) : (
+                                 <>
+                                   <Camera size={34} className="text-gray-200 dark:text-slate-dark-800 mb-3 group-hover:text-[#F9A826] transition-all" />
+                                   <span className="text-[10px] font-black text-[#0A2B4C] dark:text-slate-dark-400 uppercase tracking-widest">Back Side</span>
+                                   <span className="text-[8px] text-gray-400 dark:text-slate-dark-600 mt-2 font-bold uppercase tracking-widest shadow-sm px-3 py-1 bg-white dark:bg-slate-dark-800 rounded-full">5MB MAX</span>
+                                 </>
+                               )}
+                               <input 
+                                 id="idBackInputDev"
+                                 type="file" 
+                                 className="hidden" 
+                                 accept="image/*"
+                                 onChange={(e) => handleFileChange(e, 'idBack')}
+                               />
+                             </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-6">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="h-6 w-1.5 bg-[#0A2B4C] dark:bg-[#F9A826] rounded-full"></div>
+                            <h3 className="text-sm font-black text-[#0A2B4C] dark:text-white uppercase tracking-[0.2em]">Company Documents</h3>
+                        </div>
+                        <div className="grid grid-cols-1 gap-8">
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Upload Certificate of Incorporation</label>
+                            <div 
+                              onClick={() => document.getElementById('incorporationInput')?.click()}
+                              className="relative border-2 border-dashed border-gray-100 dark:border-slate-dark-800 bg-gray-50/20 dark:bg-slate-dark-950 rounded-[32px] p-14 flex flex-col items-center justify-center cursor-pointer hover:border-[#F9A826] hover:bg-[#F9A826]/5 transition-all group overflow-hidden shadow-sm h-48"
                             >
-                                <div className="flex flex-col items-center justify-center space-y-2">
-                                     <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                     <div className="text-sm text-gray-600">
-                                         <span className="font-semibold text-[#F9A826] cursor-pointer hover:underline" onClick={addMockProjectImage}>Click to upload</span> or drag and drop
-                                     </div>
+                              {previews.incorporationCert ? (
+                                <div className="flex items-center gap-4 text-green-600 font-bold animate-fadeIn text-center flex-col">
+                                  <CheckCircle2 size={38} />
+                                  <span className="text-sm truncate max-w-xs">{formData.incorporationCert?.name}</span>
                                 </div>
+                              ) : (
+                                <>
+                                  <Upload size={38} className="text-gray-200 dark:text-slate-dark-800 mb-3 group-hover:text-[#F9A826] transition-all" />
+                                  <span className="text-[10px] font-black text-[#0A2B4C] dark:text-slate-dark-400 uppercase tracking-[0.25em] text-center leading-relaxed">Certificate of Incorporation</span>
+                                  <span className="text-[8px] text-gray-400 dark:text-slate-dark-600 mt-3 font-bold uppercase tracking-widest">PDF / IMAGE • 10MB MAX</span>
+                                </>
+                              )}
+                              <input 
+                                id="incorporationInput"
+                                type="file" 
+                                className="hidden" 
+                                accept=".pdf,image/*"
+                                onChange={(e) => handleFileChange(e, 'incorporationCert')}
+                              />
                             </div>
-
-                            {projectImages.length > 0 && (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
-                                    {projectImages.map((img, idx) => (
-                                        <div key={idx} className="relative group rounded-lg overflow-hidden h-24 shadow-sm border border-gray-200">
-                                            <img src={img} alt="Project preview" className="w-full h-full object-cover" />
-                                            <button 
-                                                type="button"
-                                                onClick={() => removeProjectImage(idx)}
-                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            >
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                            </button>
-                                        </div>
-                                    ))}
+                          </div>
+                          
+                          <div>
+                            <label className="block text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Upload Director ID</label>
+                            <div 
+                              onClick={() => document.getElementById('directorIdInput')?.click()}
+                              className="relative border-2 border-dashed border-gray-100 dark:border-slate-dark-800 bg-gray-50/20 dark:bg-slate-dark-950 rounded-[32px] p-14 flex flex-col items-center justify-center cursor-pointer hover:border-[#F9A826] hover:bg-[#F9A826]/5 transition-all group overflow-hidden shadow-sm h-48"
+                            >
+                              {previews.directorId ? (
+                                <div className="flex items-center gap-4 text-green-600 font-bold animate-fadeIn text-center flex-col">
+                                  <CheckCircle2 size={38} />
+                                  <span className="text-sm truncate max-w-xs">{formData.directorId?.name}</span>
                                 </div>
-                            )}
+                              ) : (
+                                <>
+                                  <Upload size={38} className="text-gray-200 dark:text-slate-dark-800 mb-3 group-hover:text-[#F9A826] transition-all" />
+                                  <span className="text-[10px] font-black text-[#0A2B4C] dark:text-slate-dark-400 uppercase tracking-[0.25em] text-center leading-relaxed">Director's ID Copy</span>
+                                  <span className="text-[8px] text-gray-400 dark:text-slate-dark-600 mt-3 font-bold uppercase tracking-widest">PDF / IMAGE • 10MB MAX</span>
+                                </>
+                              )}
+                              <input 
+                                id="directorIdInput"
+                                type="file" 
+                                className="hidden" 
+                                accept=".pdf,image/*"
+                                onChange={(e) => handleFileChange(e, 'directorId')}
+                              />
+                            </div>
+                          </div>
                         </div>
+                      </div>
+                      
+                      <div className="bg-[#0A2B4C]/5 dark:bg-slate-dark-800/50 border border-[#0A2B4C]/10 dark:border-slate-dark-700 rounded-[28px] p-7 flex gap-5">
+                        <div className="h-12 w-12 bg-white dark:bg-slate-dark-950 rounded-2xl shadow-sm flex items-center justify-center text-[#0A2B4C] dark:text-[#F9A826] flex-shrink-0 animate-pulse">
+                            <Info size={24} />
+                        </div>
+                        <div>
+                            <p className="text-base font-black text-[#0A2B4C] dark:text-white mb-1">Verification Lead Time</p>
+                            <p className="text-[13px] text-gray-500 dark:text-gray-400 font-medium leading-relaxed tracking-normal">
+                                Developer accounts are typically verified within 48 to 72 hours. Our team may reach out for physical project verification.
+                            </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                        {/* Buttons */}
-                        <div className="flex flex-col-reverse sm:flex-row justify-end gap-4 pt-4">
-                            <button 
-                                type="button" 
-                                onClick={() => onNavigate('home')}
-                                className="py-3 px-8 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                type="submit" 
-                                className="py-3 px-8 bg-[#F9A826] text-white font-bold rounded-lg hover:bg-[#d88d15] shadow-md transition-all hover:shadow-lg"
-                            >
-                                Submit for Review
-                            </button>
-                        </div>
-                    </form>
+                {/* Navigation Buttons */}
+                <div className="flex flex-col-reverse sm:flex-row justify-between gap-5 mt-16 pt-10 border-t border-gray-100 dark:border-slate-dark-800">
+                  {currentStep > 1 ? (
+                    <button 
+                      type="button" 
+                      onClick={prevStep}
+                      className="py-5 px-10 bg-white dark:bg-slate-dark-800 border border-gray-200 dark:border-slate-dark-700 text-[#0A2B4C] dark:text-white text-[15px] font-black rounded-2xl hover:bg-gray-50 dark:hover:bg-slate-dark-700 hover:border-gray-300 dark:hover:border-slate-dark-600 transition-all flex items-center justify-center gap-3 transform active:scale-95 group"
+                    >
+                      <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                      Back
+                    </button>
+                  ) : (
+                    <div className="hidden sm:block"></div>
+                  )}
+
+                  {currentStep < 3 ? (
+                    <button 
+                      type="button" 
+                      onClick={nextStep}
+                      className="py-5 px-12 bg-[#0A2B4C] dark:bg-[#F9A826] text-white text-[15px] font-black rounded-2xl hover:bg-[#08223c] dark:hover:bg-[#e09a25] transition-all flex items-center justify-center gap-3 transform active:scale-95 shadow-2xl shadow-[#0A2B4C]/20 dark:shadow-[#F9A826]/10 group"
+                    >
+                      Continue
+                      <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  ) : (
+                    <button 
+                      type="submit" 
+                      className="py-5 px-14 bg-[#F9A826] text-white text-[15px] font-black rounded-2xl hover:bg-[#e09a25] transition-all transform active:scale-95 shadow-2xl shadow-[#F9A826]/30"
+                    >
+                      Submit for Verification
+                    </button>
+                  )}
                 </div>
 
-                {/* Guidance / Tips Sidebar */}
-                <aside className="lg:col-span-1 space-y-6">
-                    <div className="bg-[#f8f9fa] rounded-xl border border-gray-200 p-6 sticky top-24">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="bg-[#E0F2FE] p-2 rounded-full">
-                                <svg className="w-5 h-5 text-[#0284c7]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <h3 className="font-bold text-[#0A2B4C]">Helpful Tips</h3>
-                        </div>
-                        
-                        <ul className="space-y-4 text-sm text-gray-600">
-                            <li className="flex gap-3">
-                                <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span>
-                                    <strong className="block text-gray-800">Upload a Clear Logo</strong>
-                                    Use a high-resolution logo (PNG or JPG) to represent your brand professionally.
-                                </span>
-                            </li>
-                            <li className="flex gap-3">
-                                <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span>
-                                    <strong className="block text-gray-800">Complete Contact Details</strong>
-                                    Ensure your email and phone number are accurate so clients can reach you easily.
-                                </span>
-                            </li>
-                            <li className="flex gap-3">
-                                <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span>
-                                    <strong className="block text-gray-800">Describe Your Work</strong>
-                                    Provide a concise description of your company's vision and past achievements.
-                                </span>
-                            </li>
-                             <li className="flex gap-3">
-                                <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                <span>
-                                    <strong className="block text-gray-800">Showcase Projects</strong>
-                                    Upload images of your best projects to build trust with potential investors.
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-[#FFF8E6] rounded-xl border border-[#FDE68A] p-6">
-                        <h4 className="font-bold text-[#92400E] mb-2 text-sm">Need Assistance?</h4>
-                        <p className="text-xs text-[#92400E] mb-3">
-                            If you are facing issues registering your developer profile, our support team is here to help.
-                        </p>
-                        <a href="#" className="text-xs font-bold text-[#F9A826] hover:underline">Contact Support &rarr;</a>
-                    </div>
-                </aside>
+              </form>
             </div>
+            
+            <p className="text-center text-gray-400 text-[10px] font-black mt-10 uppercase tracking-[0.4em] opacity-60">
+              Property Development Portal • Secure Verification
+            </p>
           </>
         )}
-
       </main>
 
       <Footer onNavigate={onNavigate} />

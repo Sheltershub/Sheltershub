@@ -23,9 +23,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
   ];
 
   return (
-    <div className="bg-white dark:bg-[#082956] p-5 rounded-sm border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
+    <div className="bg-white dark:bg-slate-dark-900 p-5 rounded-sm border border-gray-200 dark:border-slate-dark-800 shadow-sm transition-colors duration-300">
       {/* Top Tabs */}
-      <div className="flex space-x-6 mb-6 text-sm font-medium border-b border-gray-100 dark:border-gray-700 pb-2">
+      <div className="flex space-x-6 mb-6 text-sm font-medium border-b border-gray-100 dark:border-slate-dark-800 pb-2">
         <button 
             className={`${activeTab === 'For Rent' ? 'text-[#0A2B4C] dark:text-brand-orange' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}`}
             onClick={() => setActiveTab('For Rent')}
@@ -45,15 +45,15 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
         <input 
           type="text" 
           placeholder="Search by keyword..." 
-          className="w-full border border-gray-300 dark:border-gray-700 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-[#0A2B4C] dark:focus:border-brand-orange bg-white dark:bg-[#0A2B4C] text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+          className="w-full border border-gray-300 dark:border-slate-dark-800 rounded px-4 py-2.5 text-sm focus:outline-none focus:border-[#0A2B4C] dark:focus:border-brand-orange bg-white dark:bg-slate-dark-800 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
         />
       </div>
 
       {/* Property Type */}
       <div className="mb-6">
         <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Property Type</label>
-        <div className="border border-gray-300 dark:border-gray-700 rounded px-2 py-2 flex flex-wrap gap-2 min-h-[42px] relative bg-white dark:bg-[#0A2B4C] items-center">
-             <span className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 font-medium">
+        <div className="border border-gray-300 dark:border-slate-dark-800 rounded px-2 py-2 flex flex-wrap gap-2 min-h-[42px] relative bg-white dark:bg-slate-dark-800 items-center">
+             <span className="bg-gray-100 dark:bg-slate-dark-950/50 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 font-medium">
                 Apartment <button className="hover:text-red-500 text-gray-400 font-bold ml-1">×</button>
              </span>
              <span className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 font-medium">
@@ -66,8 +66,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
       {/* Location */}
       <div className="mb-6">
         <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Location</label>
-        <div className="border border-gray-300 dark:border-gray-700 rounded px-2 py-2 flex flex-wrap gap-2 min-h-[42px] relative bg-white dark:bg-[#0A2B4C] items-center">
-             <span className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 font-medium">
+        <div className="border border-gray-300 dark:border-slate-dark-800 rounded px-2 py-2 flex flex-wrap gap-2 min-h-[42px] relative bg-white dark:bg-slate-dark-800 items-center">
+             <span className="bg-gray-100 dark:bg-slate-dark-950/50 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded flex items-center gap-1 font-medium">
                 Bronx <button className="hover:text-red-500 text-gray-400 font-bold ml-1">×</button>
              </span>
              <button className="text-gray-400 hover:text-gray-600 text-lg absolute right-2 top-1.5 leading-none">×</button>
@@ -77,10 +77,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
       {/* Price Slider */}
       <div className="mb-6">
         <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Price</label>
-        <div className="relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full my-4">
+        <div className="relative h-1.5 bg-gray-200 dark:bg-slate-dark-800 rounded-full my-4">
             <div className="absolute left-0 w-1/3 h-full bg-[#0A2B4C] dark:bg-brand-orange rounded-full"></div>
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-gray-900 shadow cursor-pointer hover:scale-110 transition-transform"></div>
-            <div className="absolute left-1/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-gray-900 shadow cursor-pointer hover:scale-110 transition-transform"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-slate-dark-950 shadow cursor-pointer hover:scale-110 transition-transform"></div>
+            <div className="absolute left-1/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-slate-dark-950 shadow cursor-pointer hover:scale-110 transition-transform"></div>
         </div>
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 font-medium">
             <span>$0</span>
@@ -91,10 +91,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
       {/* Size Slider */}
       <div className="mb-6">
         <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Size</label>
-        <div className="relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full my-4">
+        <div className="relative h-1.5 bg-gray-200 dark:bg-slate-dark-800 rounded-full my-4">
             <div className="absolute left-0 w-2/3 h-full bg-[#0A2B4C] dark:bg-brand-orange rounded-full"></div>
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-gray-900 shadow cursor-pointer hover:scale-110 transition-transform"></div>
-            <div className="absolute left-2/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-gray-900 shadow cursor-pointer hover:scale-110 transition-transform"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-slate-dark-950 shadow cursor-pointer hover:scale-110 transition-transform"></div>
+            <div className="absolute left-2/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-[#0A2B4C] dark:bg-brand-orange rounded-full border-2 border-white dark:border-slate-dark-950 shadow cursor-pointer hover:scale-110 transition-transform"></div>
         </div>
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 font-medium">
             <span>0ft²</span>
@@ -106,14 +106,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ selectedFeatures = [], on
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
             <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Bedrooms</label>
-            <div className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2.5 text-sm flex justify-between items-center bg-white dark:bg-[#0A2B4C]">
+            <div className="border border-gray-300 dark:border-slate-dark-800 rounded px-3 py-2.5 text-sm flex justify-between items-center bg-white dark:bg-slate-dark-800">
                 <span className="text-gray-700 dark:text-gray-200">2</span>
-                <button className="text-gray-400 hover:text-red-500 bg-gray-100 dark:bg-gray-800 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold leading-none">×</button>
+                <button className="text-gray-400 hover:text-red-500 bg-gray-100 dark:bg-slate-dark-950/50 rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold leading-none">×</button>
             </div>
         </div>
         <div>
             <label className="block text-sm text-gray-600 dark:text-gray-400 mb-2">Bathrooms</label>
-             <input type="text" placeholder="Placeholder" className="w-full border border-gray-300 dark:border-gray-700 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#0A2B4C] dark:focus:border-brand-orange bg-white dark:bg-[#0A2B4C] text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
+             <input type="text" placeholder="Placeholder" className="w-full border border-gray-300 dark:border-slate-dark-800 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#0A2B4C] dark:focus:border-brand-orange bg-white dark:bg-slate-dark-800 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
         </div>
       </div>
 

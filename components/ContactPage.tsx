@@ -44,7 +44,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen font-sans">
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen font-sans transition-colors duration-300">
       <Header onNavigate={onNavigate} activePage="contact" />
 
       <main>
@@ -70,8 +70,8 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 
                 {/* 3. Contact Form Section */}
                 <div className="lg:col-span-2">
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-                        <h2 className="text-2xl font-bold text-[#0A2B4C] mb-6">Send us a Message</h2>
+                    <div className="bg-white dark:bg-slate-dark-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-dark-800 p-8">
+                        <h2 className="text-2xl font-bold text-[#0A2B4C] dark:text-white mb-6">Send us a Message</h2>
                         
                         {submitted ? (
                             <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
@@ -91,7 +91,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name <span className="text-red-500">*</span></label>
                                         <input 
                                             type="text" 
                                             name="name"
@@ -99,11 +99,11 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                                             onChange={handleChange}
                                             required 
                                             placeholder="e.g. John Doe" 
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" 
+                                            className="w-full border border-gray-300 dark:border-slate-dark-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white dark:bg-slate-dark-950 text-gray-700 dark:text-gray-200" 
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address <span className="text-red-500">*</span></label>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address <span className="text-red-500">*</span></label>
                                         <input 
                                             type="email" 
                                             name="email"
@@ -111,30 +111,30 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                                             onChange={handleChange}
                                             required 
                                             placeholder="e.g. john@example.com" 
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" 
+                                            className="w-full border border-gray-300 dark:border-slate-dark-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white dark:bg-slate-dark-950 text-gray-700 dark:text-gray-200" 
                                         />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number <span className="text-gray-400 font-normal">(Optional)</span></label>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Phone Number <span className="text-gray-400 font-normal">(Optional)</span></label>
                                         <input 
                                             type="tel" 
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleChange}
                                             placeholder="+233 00 000 0000" 
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]" 
+                                            className="w-full border border-gray-300 dark:border-slate-dark-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white dark:bg-slate-dark-950 text-gray-700 dark:text-gray-200" 
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Subject</label>
                                         <select 
                                             name="subject"
                                             value={formData.subject}
                                             onChange={handleChange}
-                                            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white"
+                                            className="w-full border border-gray-300 dark:border-slate-dark-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white dark:bg-slate-dark-950 text-gray-700 dark:text-gray-200"
                                         >
                                             <option>General Inquiry</option>
                                             <option>Support</option>
@@ -145,7 +145,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Message <span className="text-red-500">*</span></label>
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Message <span className="text-red-500">*</span></label>
                                     <textarea 
                                         name="message"
                                         value={formData.message}
@@ -153,7 +153,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                                         required 
                                         rows={6} 
                                         placeholder="How can we help you?" 
-                                        className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826]"
+                                        className="w-full border border-gray-300 dark:border-slate-dark-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] bg-white dark:bg-slate-dark-950 text-gray-700 dark:text-gray-200"
                                     ></textarea>
                                 </div>
 
@@ -176,7 +176,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                                     <button 
                                         type="button" 
                                         onClick={handleReset}
-                                        className="py-3 px-6 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                                        className="py-3 px-6 bg-white dark:bg-slate-dark-900 border border-gray-300 dark:border-slate-dark-800 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-dark-800 transition-colors"
                                     >
                                         Reset Form
                                     </button>
@@ -262,16 +262,16 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                     </div>
 
                     {/* 5. Map Section */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-2 h-64 md:h-80 overflow-hidden relative group">
+                    <div className="bg-white dark:bg-slate-dark-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-dark-800 p-2 h-64 md:h-80 overflow-hidden relative group">
                         {/* Simulated Map */}
-                        <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-cover bg-center opacity-30"></div>
+                        <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-cover bg-center opacity-30 grayscale dark:invert"></div>
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="bg-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce">
+                            <div className="bg-white dark:bg-slate-dark-800 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce border dark:border-slate-dark-700">
                                 <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                <span className="font-bold text-gray-800">We are here!</span>
+                                <span className="font-bold text-gray-800 dark:text-white">We are here!</span>
                             </div>
                         </div>
-                        <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 text-xs rounded shadow text-gray-500">
+                        <div className="absolute bottom-4 right-4 bg-white/90 dark:bg-slate-dark-800/90 px-3 py-1 text-xs rounded shadow text-gray-500 dark:text-gray-400">
                             Map Data © Sheltershub
                         </div>
                     </div>

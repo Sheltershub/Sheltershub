@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigate: (page: string) => void;
@@ -7,350 +8,193 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onLogin }) => {
-  const [view, setView] = useState<'login' | 'register' | 'forgot' | 'verify'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  // Mock credentials
-  const MOCK_CREDENTIALS = [
-    { email: 'buyer@sheltershub.com', password: 'password123', role: 'user', redirect: 'user-profile' },
-    { email: 'agency@sheltershub.com', password: 'password123', role: 'agency', redirect: 'agency-dashboard' },
-    { email: 'developer@sheltershub.com', password: 'password123', role: 'developer', redirect: 'developer-dashboard' },
-    { email: 'admin@sheltershub.com', password: 'admin123', role: 'admin', redirect: 'admin-dashboard' },
-    { email: 'editor@sheltershub.com', password: 'editor123', role: 'editor', redirect: 'admin-dashboard' },
-    { email: 'agent@sheltershub.com', password: 'demo123', role: 'agent', redirect: 'agent-verification' }
-  ];
+  const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  // User Type State
-  const [userType, setUserType] = useState('Buyer');
-  const userTypes = ['Buyer', 'Agent', 'Agency', 'Developer', 'Administrator', 'Editor'];
-
-  // Handle User Type Selection
-  const handleUserTypeChange = (type: string) => {
-    setUserType(type);
-    setError(null);
-    const mock = MOCK_CREDENTIALS.find(c => {
-      if (type === 'Buyer') return c.role === 'user';
-      if (type === 'Administrator') return c.role === 'admin';
-      return c.role === type.toLowerCase();
-    });
-
-    if (mock) {
-      setEmail(mock.email);
-      setPassword(mock.password);
-    } else {
-      setEmail('');
-      setPassword('');
+  const validate = () => {
+    const newErrors: { email?: string; password?: string } = {};
+    if (!email) {
+      newErrors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
+    if (!password) {
+      newErrors.password = 'Password is required';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
-    // Basic Validation
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
-    }
-
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
+    if (!validate()) return;
 
     setLoading(true);
-    
-    // Simulate API call
+    // Simulate login logic
     setTimeout(() => {
       setLoading(false);
+      setSuccess(true);
       
-      // Find matching mock credentials
-      const user = MOCK_CREDENTIALS.find(u => u.email === email && u.password === password);
+      // Determine role based on email for testing (mock logic)
+      let role = 'user';
+      if (email.includes('agent')) role = 'agent';
+      else if (email.includes('agency')) role = 'agency';
+      else if (email.includes('developer')) role = 'developer';
+      else if (email.includes('admin')) role = 'admin';
 
-      if (user) {
-        onLogin(user.role);
-        onNavigate(user.redirect);
-      } else {
-        setError('Invalid login details. Please check your email and password.');
-      }
+      setTimeout(() => {
+        onLogin(role);
+        // Redirect based on role
+        if (role === 'admin') onNavigate('admin-dashboard');
+        else if (role === 'agent') onNavigate('agent-properties');
+        else if (role === 'agency') onNavigate('agency-dashboard');
+        else if (role === 'developer') onNavigate('developer-dashboard');
+        else onNavigate('buyer-profile');
+      }, 2000);
     }, 1500);
-  };
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (userType === 'Editor') {
-        onNavigate('editor-register');
-        return;
-    }
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      setView('verify');
-    }, 1500);
-  };
-
-  const handleForgot = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      alert(`Password reset link sent to ${email}`);
-      setView('login');
-    }, 1000);
-  };
-
-  const handleVerificationConfirm = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      // Route based on user type
-      if (userType === 'Agent') onNavigate('agent-verification');
-      else if (userType === 'Developer') onNavigate('developer-dashboard');
-      else if (userType === 'Agency') onNavigate('agency-dashboard'); 
-      else onNavigate('home');
-    }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-             <img src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" alt="Sheltershub Logo" className="h-20 w-auto" />
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-dark-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans transition-colors duration-300">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <div className="mb-8 cursor-pointer inline-block" onClick={() => onNavigate('home')}>
+          <img 
+            src="https://i.ibb.co/4RJRrttb/Sheltershub-Logo-png.png" 
+            alt="Sheltershub Logo" 
+            className="h-16 w-auto mx-auto" 
+          />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-[#0A2B4C]">
-          {view === 'login' && 'Sign in to your account'}
-          {view === 'register' && 'Create a new account'}
-          {view === 'forgot' && 'Reset your password'}
-          {view === 'verify' && 'Verify your identity'}
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          {view === 'login' && (
-            <>
-              Or{' '}
-              <button onClick={() => setView('register')} className="font-medium text-[#F9A826] hover:text-[#d88d15]">
-                register for free
-              </button>
-            </>
-          )}
-          {view === 'register' && (
-            <>
-              Already have an account?{' '}
-              <button onClick={() => setView('login')} className="font-medium text-[#F9A826] hover:text-[#d88d15]">
-                Sign in
-              </button>
-            </>
-          )}
-          {view === 'forgot' && (
-            <button onClick={() => setView('login')} className="font-medium text-[#F9A826] hover:text-[#d88d15]">
-              Back to sign in
-            </button>
-          )}
-        </p>
+        <h2 className="text-3xl font-black text-[#0A2B4C] dark:text-white mb-2">Welcome Back</h2>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">Log in to your Sheltershub account.</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
-          
-          {view === 'verify' ? (
-            <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-                <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">Check your email</h3>
-              <p className="text-sm text-gray-500 mb-6">
-                We have sent a verification link to <span className="font-bold text-gray-800">{email}</span>. 
-                Please click the link in the email to confirm your identity and access your account.
-              </p>
-              
-              <div className="space-y-4">
-                <button
-                  type="button"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#0A2B4C] hover:bg-[#08223c] focus:outline-none"
-                  onClick={() => window.open('https://gmail.com', '_blank')}
-                >
-                  Open Email App
-                </button>
-                
-                <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300"></div>
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-white text-gray-500">For Demo Purpose</span>
-                    </div>
-                </div>
-
-                <button
-                    onClick={handleVerificationConfirm}
-                    disabled={loading}
-                    className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
-                >
-                    {loading ? 'Verifying...' : 'Simulate Clicking Link'}
-                </button>
-              </div>
-              
-              <p className="mt-6 text-xs text-gray-400">
-                  Didn't receive the email? <button className="text-[#F9A826] hover:underline">Resend</button>
-              </p>
+        <div className="bg-white dark:bg-slate-dark-900 py-10 px-8 shadow-2xl rounded-2xl border border-gray-100 dark:border-slate-dark-800 mb-8 relative overflow-hidden">
+          {success && (
+            <div className="absolute inset-x-0 top-0 bg-green-500 text-white py-3 px-4 text-center font-bold text-sm animate-slideDown z-20">
+              Login successful. Redirecting to your dashboard...
             </div>
-          ) : (
-            <form className="space-y-6" onSubmit={view === 'login' ? handleLogin : view === 'register' ? handleRegister : handleForgot}>
-              
-              {/* User Type Selection */}
-              {(view === 'login' || view === 'register') && (
-                <div className="mb-6">
-                  {error && (
-                    <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-red-600 text-sm font-medium animate-fadeIn">
-                       {error}
-                    </div>
-                  )}
-                  <label className="block text-sm font-bold text-gray-700 mb-3 text-center">
-                    I am a...
-                  </label>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {userTypes.map((type) => (
-                      <button
-                        key={type}
-                        type="button"
-                        onClick={() => handleUserTypeChange(type)}
-                        className={`px-3 py-1.5 text-xs font-semibold rounded-full transition-all border ${
-                          userType === type
-                            ? 'bg-[#0A2B4C] text-white border-[#0A2B4C] shadow-md transform scale-105'
-                            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
-                  {['Agent', 'Administrator', 'Editor'].includes(userType) && view === 'login' && (
-                      <p className="text-center text-xs text-green-600 mt-2 font-medium">
-                          ✓ Demo credentials auto-filled
-                      </p>
-                  )}
-                </div>
-              )}
-
-              {view === 'register' && (
-                <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                    Username
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="username"
-                      name="username"
-                      type="text"
-                      required
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#F9A826] focus:border-[#F9A826] sm:text-sm"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {view !== 'login' && view !== 'register' && view !== 'forgot' ? null : (
-                 <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email address
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#F9A826] focus:border-[#F9A826] sm:text-sm"
-                      />
-                    </div>
-                  </div>
-              )}
-
-              {view !== 'forgot' && (
-                <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Password
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      autoComplete={view === 'login' ? "current-password" : "new-password"}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#F9A826] focus:border-[#F9A826] sm:text-sm"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {view === 'login' && (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 text-[#F9A826] focus:ring-[#F9A826] border-gray-300 rounded"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                      Remember me
-                    </label>
-                  </div>
-
-                  <div className="text-sm">
-                    <button type="button" onClick={() => setView('forgot')} className="font-medium text-[#F9A826] hover:text-[#d88d15]">
-                      Forgot your password?
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              <div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#0A2B4C] hover:bg-[#08223c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0A2B4C] disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
-                >
-                  {loading ? (
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  ) : null}
-                  {view === 'login' && (loading ? 'Signing in...' : 'Sign in')}
-                  {view === 'register' && (loading ? 'Creating account...' : 'Register')}
-                  {view === 'forgot' && (loading ? 'Sending link...' : 'Send Reset Link')}
-                </button>
-              </div>
-            </form>
           )}
 
+          <form className="space-y-6" onSubmit={handleLogin}>
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500' : 'border-gray-200 dark:border-slate-dark-800'} focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] outline-none transition-all text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-slate-dark-950`}
+                placeholder="Enter your email"
+              />
+              {errors.email && <p className="mt-1 text-red-500 text-xs font-medium">{errors.email}</p>}
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.password ? 'border-red-500' : 'border-gray-200 dark:border-slate-dark-800'} focus:border-[#F9A826] focus:ring-1 focus:ring-[#F9A826] outline-none transition-all text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-slate-dark-950 pr-12`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {errors.password && <p className="mt-1 text-red-500 text-xs font-medium">{errors.password}</p>}
+            </div>
+
+            {/* Remember & Forgot Row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 text-[#F9A826] border-gray-300 dark:border-slate-dark-800 rounded focus:ring-[#F9A826] cursor-pointer bg-white dark:bg-slate-dark-950"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600 dark:text-gray-400 font-medium cursor-pointer">
+                  Remember me
+                </label>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => onNavigate('forgot-password')}
+                className="text-sm font-bold text-[#F9A826] hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            {/* Login Button */}
+            <button
+              type="submit"
+              disabled={loading || success}
+              className="w-full bg-[#F9A826] hover:bg-[#e09a25] text-white font-black py-4 rounded-xl shadow-lg shadow-[#F9A826]/20 transition-all flex items-center justify-center gap-2 transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loading ? <Loader2 className="animate-spin" size={20} /> : null}
+              {loading ? 'Logging in...' : 'Sign In'}
+            </button>
+
+            {/* Signup Link */}
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                Don't have an account?{' '}
+                <button 
+                  type="button" 
+                  onClick={() => onNavigate('register')}
+                  className="text-[#0A2B4C] dark:text-brand-orange font-bold hover:underline"
+                >
+                  Sign Up
+                </button>
+              </p>
+            </div>
+          </form>
+        </div>
+
+        {/* Quick Access Row */}
+        <div className="flex flex-wrap justify-center gap-3 mt-8 w-full max-w-lg mx-auto px-4">
+          {[
+            { label: 'Agent', route: 'agent-properties', role: 'agent' },
+            { label: 'Agency', route: 'agency-dashboard', role: 'agency' },
+            { label: 'Developer', route: 'developer-dashboard', role: 'developer' },
+            { label: 'Administrator', route: 'admin-dashboard', role: 'admin' },
+            { label: 'Editor', route: 'admin-dashboard', role: 'editor' }
+          ].map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                onLogin(item.role);
+                onNavigate(item.route);
+              }}
+              className="flex-1 min-w-[100px] bg-white dark:bg-slate-dark-900 border border-[#0A2B4C] dark:border-slate-dark-800 text-[#0A2B4C] dark:text-gray-200 text-[10px] sm:text-[11px] font-bold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-dark-800 transition-all text-center h-14 flex flex-col items-center justify-center shadow-sm"
+            >
+              <span className="opacity-60 text-[8px] uppercase tracking-tighter">Login as</span>
+              <span className="truncate w-full px-1">{item.label}</span>
+            </button>
+          ))}
         </div>
       </div>
-      
-      <div className="mt-8 text-center">
-         <button onClick={() => onNavigate('home')} className="text-sm text-gray-500 hover:text-[#0A2B4C] flex items-center justify-center mx-auto gap-1">
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-         </button>
-      </div>
-
     </div>
   );
 };

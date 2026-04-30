@@ -46,14 +46,14 @@ const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen font-sans">
+    <div className="bg-gray-50 dark:bg-slate-dark-950 min-h-screen font-sans transition-colors duration-300">
       <Header onNavigate={onNavigate} activePage="faq" />
 
       {/* Page Title Section */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-slate-dark-900 border-b border-gray-200 dark:border-slate-dark-800">
         <div className="container mx-auto px-4 py-12 text-center">
-            <h1 className="text-3xl font-bold text-[#0A2B4C] mb-2">Frequently Asked Questions</h1>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">Find quick answers to common questions about using Sheltershub.</p>
+            <h1 className="text-3xl font-bold text-[#0A2B4C] dark:text-white mb-2">Frequently Asked Questions</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-lg max-w-2xl mx-auto">Find quick answers to common questions about using Sheltershub.</p>
         </div>
       </div>
 
@@ -64,13 +64,13 @@ const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
             {faqs.map((faq, index) => (
                 <div 
                     key={index} 
-                    className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden transition-all duration-200"
+                    className="bg-white dark:bg-slate-dark-900 rounded-xl border border-gray-200 dark:border-slate-dark-800 shadow-sm overflow-hidden transition-all duration-200"
                 >
                     <button 
                         onClick={() => toggleAccordion(index)}
-                        className="w-full flex items-center justify-between p-6 text-left focus:outline-none bg-white hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center justify-between p-6 text-left focus:outline-none bg-white dark:bg-slate-dark-900 hover:bg-gray-50 dark:hover:bg-slate-dark-800 transition-colors"
                     >
-                        <span className={`font-bold text-lg ${openIndex === index ? 'text-[#F9A826]' : 'text-[#0A2B4C]'}`}>
+                        <span className={`font-bold text-lg ${openIndex === index ? 'text-[#F9A826]' : 'text-[#0A2B4C] dark:text-white'}`}>
                             {faq.question}
                         </span>
                         <svg 
@@ -87,7 +87,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ onNavigate }) => {
                             openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                         }`}
                     >
-                        <div className="p-6 pt-0 text-gray-600 leading-relaxed border-t border-gray-100">
+                        <div className="p-6 pt-0 text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-100 dark:border-slate-dark-800">
                             {faq.answer}
                         </div>
                     </div>
